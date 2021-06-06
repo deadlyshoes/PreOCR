@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(PreOCR gui.h gui.cpp ppm.h ppm.cpp main.cpp)
+add_executable(PreOCR gui.h gui.cpp ppm.h ppm.cpp main_gui.cpp)
+add_executable(PreOCRcl main.cpp ppm.h ppm.cpp)
 
 target_link_libraries(PreOCR Qt5::Widgets)
