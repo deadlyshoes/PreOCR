@@ -143,42 +143,48 @@ void PPM::write(const std::string& file) {
 }
 
 // works only for one channel ppms
-std::vector<double> PPM::get_histogram() {
-    std::vector<int> histogram(header.max_val + 1, 0);
+std::vector<std::vector<double>> PPM::get_histogram() {
+    std::vector<std::vector<int>> histogram(header.n_channels, std::vector<int>(header.max_val + 1, 0));
     for (int i = 0; i < header.height; i++) {
         for (int j = 0; j < header.width; j++) {
             for (int k = 0; k < header.n_channels; k++) {
-                histogram[data[i][j][k]]++;
+                histogram[k][data[i][j][k]]++;
             }
         }
     }
 
     double n = header.width * header.height;
-    std::vector<double> p(header.max_val + 1, 0);
-    for (int i = 0; i <= header.max_val; i++) {
-        p[i] = histogram[i] / n;
-        // std::cout << p[i] << " " << histogram[i] << std::endl;
+    std::vector<std::vector<double>> p(header.n_channels, std::vector<double>(header.max_val + 1, 0));
+    for (int k = 0; k < header.n_channels; k++) {
+        for (int i = 0; i <= header.max_val; i++) {
+            p[k][i] = histogram[k][i] / n;
+            // std::cout << p[i] << " " << histogram[i] << std::endl;
+        }
     }
 
-    std::vector<double> t(header.max_val + 1, 0);
-    for (int i = 0; i <= header.max_val; i++) {
-        if (i > 0)
-            t[i] = t[i - 1];
-        t[i] += p[i];
-        std::cout << t[i] << " ";
+    std::vector<std::vector<double>> t(header.n_channels, std::vector<double>(header.max_val + 1, 0));
+    for (int k = 0; k < header.n_channels; k++) {
+        for (int i = 0; i <= header.max_val; i++) {
+            if (i > 0)
+                t[k][i] = t[k][i - 1];
+            t[k][i] += p[k][i];
+            std::cout << t[k][i] << " ";
+        }
     }
 
     return t;
 }
 
 void PPM::equal() {
-    std::vector<double> t = get_histogram();
+    std::vector<std::vector<double>> t = get_histogram();
 
-    std::vector<int> g(header.max_val + 1, 0);
-    for (int i = 0; i <= header.max_val; i++) {
-        g[i] = round(t[i] * (header.max_val));
-        if (g[i] > header.max_val)
-            g[i] = header.max_val;
+    std::vector<std::vector<int>> g(header.n_channels, std::vector<int>(header.max_val + 1, 0));
+    for (int k = 0; k < header.n_channels; k++) {
+        for (int i = 0; i <= header.max_val; i++) {
+            g[k][i] = round(t[k][i] * (header.max_val));
+            if (g[k][i] > header.max_val)
+                g[k][i] = header.max_val;
+        }
     }
 
     std::vector<std::vector<std::vector<int>>> equal_data = data;
@@ -186,7 +192,7 @@ void PPM::equal() {
     for (int i = 0; i < header.height; i++) {
         for (int j = 0; j < header.width; j++) {
             for (int k = 0; k < header.n_channels; k++) {
-                equal_data[i][j][k] = g[data[i][j][k]];
+                equal_data[i][j][k] = g[k][data[i][j][k]];
             }
         }
     }

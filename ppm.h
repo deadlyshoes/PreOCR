@@ -25,7 +25,7 @@ public:
     Header header;
     std::vector<std::vector<std::vector<int>>> data;
 
-    std::vector<double> get_histogram();
+    std::vector<std::vector<double>> get_histogram();
     void write(const std::string& file);
 
     // operations
