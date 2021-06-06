@@ -168,7 +168,7 @@ std::vector<double> PPM::get_histogram() {
     return t;
 }
 
-std::vector<std::vector<std::vector<int>>> PPM::equal() {
+void PPM::equal() {
     std::vector<double> t = get_histogram();
 
     std::vector<int> g(header.max_val + 1, 0);
@@ -179,14 +179,15 @@ std::vector<std::vector<std::vector<int>>> PPM::equal() {
     }
 
     std::vector<std::vector<std::vector<int>>> equal_data = data;
+
     for (int i = 0; i < header.height; i++) {
         for (int j = 0; j < header.width; j++) {
             for (int k = 0; k < header.n_channels; k++) {
                 equal_data[i][j][k] = g[data[i][j][k]];
-                // std::cout << g[data[i][j][k]] << std::endl;
             }
         }
     }
 
-    return equal_data;
+    data = equal_data;
+}
 }

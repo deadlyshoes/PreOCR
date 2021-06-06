@@ -27,5 +27,5 @@ public:
     void write(const std::string& file);
 
     // operations
-    std::vector<std::vector<std::vector<int>>> equal();
+    void equal();
 };
