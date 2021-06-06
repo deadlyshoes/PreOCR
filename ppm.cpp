@@ -103,6 +103,9 @@ PPM::~PPM() {
 
 void PPM::read_bpp(const int& n) {
     header.in_binary = n > 3;
+    if (header.in_binary) {
+        throw "binary (raw) PPM is not supported";
+    }
 
     const std::vector<int> bpp_values = { 1, 8, 24 };
     header.bpp = bpp_values[(n - 1) % 3];
