@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
+#include <set>
 #include <math.h>
 
 struct Header {
@@ -28,4 +30,5 @@ public:
 
     // operations
     void equal();
+    void median(int n);
 };
