@@ -21,10 +21,12 @@ private:
     QImage *qimage;
     QLabel *label;
     QMenu *filters_menu;
+    QAction *save_as_act;
 
     void open_image();
     void load_image();
     void load_pixels();
+    void save_image_as();
 
     enum Filters {
         EQUAL,

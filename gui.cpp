@@ -6,7 +6,11 @@ MainWindow::MainWindow() {
     QMenu *file_menu = menuBar()->addMenu("&File");
     QAction *open_act = new QAction("&Open", this);
     connect(open_act, &QAction::triggered, this, &MainWindow::open_image);
+    save_as_act = new QAction("&Save As...", this);
+    connect(save_as_act, &QAction::triggered, this, &MainWindow::save_image_as);
     file_menu->addAction(open_act);
+    file_menu->addAction(save_as_act);
+    save_as_act->setEnabled(false);
     file_menu->addSeparator();
     file_menu->addAction("E&xit", this, &QWidget::close);
 
@@ -34,11 +38,12 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::open_image() {
-    QString image_path = QFileDialog::getOpenFileName(this, "Open a file");
+    QString image_path = QFileDialog::getOpenFileName(this, "Open");
     image = new PPM(image_path.toStdString());
     if (image) {
         MainWindow::load_image();
         filters_menu->setEnabled(true);
+        save_as_act->setEnabled(true);
     }
 }
 
@@ -74,6 +79,11 @@ void MainWindow::load_pixels() {
     }
 
     label->setPixmap(QPixmap::fromImage(*qimage));
+}
+
+void MainWindow::save_image_as() {
+    QString new_image_path = QFileDialog::getSaveFileName(this, "Save As");
+    image->write(new_image_path.toStdString());
 }
 
 void MainWindow::apply_filter(Filters filter) {
