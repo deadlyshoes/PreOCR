@@ -7,9 +7,11 @@ project(PreOCR LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets)
 
-add_executable(PreOCR gui.h gui.cpp ppm.h ppm.cpp main_gui.cpp)
-add_executable(PreOCRcl main.cpp ppm.h ppm.cpp)
+if (Qt5_FOUND)
+    add_executable(PreOCR_gui gui.h gui.cpp ppm.h ppm.cpp main_gui.cpp)
+    target_link_libraries(PreOCR_gui Qt5::Widgets)
+endif()
 
-target_link_libraries(PreOCR Qt5::Widgets)
+add_executable(PreOCR main.cpp ppm.h ppm.cpp)
