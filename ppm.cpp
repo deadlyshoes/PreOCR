@@ -16,13 +16,28 @@ PPM::PPM(const std::string& file) {
         int n = 0;
         bool has_n = false;
 
+        if (info_count == 3 && header.bpp == 1) {
+            for (char c : line) {
+                if (isdigit(c)) {
+                    n = c - '0';
+
+                    data[row][col][0] = n;
+                    col++;
+                    if (col == header.width) {
+                        col = 0;
+                        row++;
+                    }
+                }
+            }
+
+            continue;
+        }
+
         for (char c : line) {
             if (isdigit(c)) {
                 n = n * 10 + (c - '0');
                 has_n = true;
-            }
-            else if (has_n) {
-
+            } else if (has_n) {
                 if (info_count > 3) {
                     data[row][col][channel] = n;
                     channel++;
