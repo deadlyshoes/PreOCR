@@ -69,7 +69,9 @@ void MainWindow::load_pixels() {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (bpp < 24) {
+            if (bpp == 1) {
+                qimage->setPixel(j, i, (image->data[i][j][0] + 1) % 2);
+            } else if (bpp < 24) {
                 qimage->setPixel(j, i, image->data[i][j][0]);
             } else {
                 QRgb value = qRgb(image->data[i][j][0], image->data[i][j][1], image->data[i][j][2]);
