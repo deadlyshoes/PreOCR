@@ -228,20 +228,19 @@ void PPM::median(int n) {
 
     std::vector<std::vector<std::vector<int>>> median_data = data;
 
-    int cur_i, cur_j;
     std::vector<std::multiset<int>> median_mask(header.n_channels, std::multiset<int>());
 
-    for (int i = 1; i < header.height - 1; i++) {
-        for (int j = 1; j < header.width - 1; j++) {
+    for (int i = n / 2; i < header.height - n / 2; i++) {
+        for (int j = n / 2; j < header.width - n / 2; j++) {
             for (int k = 0; k < header.n_channels; k++) {
                 // build mask
                 median_mask[k].clear();
-                for (int l = i - 1; l <= i + 1; l++)
-                    for (int m = j - 1; m <= j + 1; m++)
+                for (int l = i - n / 2; l <= i + n / 2; l++)
+                    for (int m = j - n / 2; m <= j + n / 2; m++)
                         median_mask[k].insert(data[l][m][k]);
 
                 auto it = median_mask[k].begin();
-                for (int l = 0; l < n / 2; l++)
+                for (int l = 0; l < (n * n) / 2; l++)
                     it++;
                 median_data[i][j][k] = *it;
             }
