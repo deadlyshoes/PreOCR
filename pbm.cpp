@@ -2,6 +2,8 @@
 
 PBM::PBM(const std::string& file) {
     std::ifstream input(file);
+    if (input.fail())
+        throw "Não foi possível ler o arquivo";
 
     std::string line;
     int info_count = 0;
@@ -65,8 +67,7 @@ PBM::PBM(const std::string& file) {
         if (has_n) {
             if (info_count == 0) {
                 if (n != 1) {
-                    std::cout << "Não é do tipo P1" << std::endl;
-                    exit(1);
+                    throw "Não é do tipo P1";
                 }
             }
             else if (info_count == 1) {
