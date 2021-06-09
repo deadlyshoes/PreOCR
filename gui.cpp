@@ -15,11 +15,8 @@ MainWindow::MainWindow() {
     file_menu->addAction("E&xit", this, &QWidget::close);
 
     filters_menu = menuBar()->addMenu("&Filters");
-    QAction *equal_act = new QAction("&Histogram Equalization", this);
-    connect(equal_act, &QAction::triggered, this, [=]{apply_filter(Filters::EQUAL);});
     QAction *median_act = new QAction("&Median", this);
     connect(median_act, &QAction::triggered, this, [=]{apply_filter(Filters::MEDIAN);});
-    filters_menu->addAction(equal_act);
     filters_menu->addAction(median_act);
     filters_menu->setEnabled(false);
 
@@ -39,7 +36,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::open_image() {
     QString image_path = QFileDialog::getOpenFileName(this, "Open");
-    image = new PPM(image_path.toStdString());
+    image = new PBM(image_path.toStdString());
     if (image) {
         MainWindow::load_image();
         filters_menu->setEnabled(true);
@@ -48,35 +45,21 @@ void MainWindow::open_image() {
 }
 
 void MainWindow::load_image() {
-    int bpp = image->header.bpp;
-    int width = image->header.width;
-    int height = image->header.height;
+    int width = image->width;
+    int height = image->height;
 
-    if (bpp == 1)
-        qimage = new QImage(width, height, QImage::Format_Mono);
-    else if (bpp == 8)
-        qimage = new QImage(width, height, QImage::Format_Grayscale8);
-    else if (bpp == 24)
-        qimage = new QImage(width, height, QImage::Format_RGB32);
+    qimage = new QImage(width, height, QImage::Format_Mono);
 
     MainWindow::load_pixels();
 }
 
 void MainWindow::load_pixels() {
-    int bpp = image->header.bpp;
-    int width = image->header.width;
-    int height = image->header.height;
+    int width = image->width;
+    int height = image->height;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (bpp == 1) {
-                qimage->setPixel(j, i, (image->data[i][j][0] + 1) % 2);
-            } else if (bpp < 24) {
-                qimage->setPixel(j, i, image->data[i][j][0]);
-            } else {
-                QRgb value = qRgb(image->data[i][j][0], image->data[i][j][1], image->data[i][j][2]);
-                qimage->setPixel(j, i, value);
-            }
+            qimage->setPixel(j, i, (image->data[i][j] + 1) % 2);
         }
     }
 
@@ -90,9 +73,6 @@ void MainWindow::save_image_as() {
 
 void MainWindow::apply_filter(Filters filter) {
     switch (filter) {
-        case EQUAL:
-            image->equal();
-            break;
         case MEDIAN:
             image->median(3);
             break;

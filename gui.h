@@ -1,6 +1,6 @@
 #include <QMainWindow>
 
-#include "ppm.h"
+#include "pbm.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -17,7 +17,7 @@ public:
     ~MainWindow();
 
 private:
-    PPM *image;
+    PBM *image;
     QImage *qimage;
     QLabel *label;
     QMenu *filters_menu;
@@ -29,7 +29,6 @@ private:
     void save_image_as();
 
     enum Filters {
-        EQUAL,
         MEDIAN,
     };
 
