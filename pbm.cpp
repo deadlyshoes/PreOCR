@@ -141,7 +141,6 @@ void PBM::median(const int &n) {
                 count_1 -= median_dp[i + n / 2][j - n / 2 - 1];
             if (i - n / 2 && j - n / 2)
                 count_1 += median_dp[i - n / 2 - 1][j - n / 2 - 1];
-            std::cout << count_1 << " ";
 
             if (count_1 > (n * n) / 2)
                 data[i][j] = 1;
