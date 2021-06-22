@@ -20,4 +20,5 @@ public:
 
     // operations
     void median(const int &n);
+    void dilation(std::vector<std::vector<int>> se);
 };
