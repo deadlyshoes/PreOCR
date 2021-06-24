@@ -151,6 +151,7 @@ void PBM::median(const int &n) {
 }
 
 
+
 void PBM::erosion() {
     std::cout << "fazendo a erosão" << std::endl;
     std::vector<std::vector<int>>new_img(height, std::vector<int>(width, 0));
@@ -183,3 +184,31 @@ void PBM::erosion() {
     }
     data = new_img;
 }
+
+void PBM::dilation(std::vector<std::vector<int>> se) {
+    int se_height = se.size();
+    int se_width = se[0].size();
+
+    std::vector<std::vector<int>> dilated_data(height, std::vector<int>(width, 0));
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            // check intersection with SE
+            bool one_common = false;
+            for (int k = 0; k < se_height; k++) {
+                for (int l = 0; l < se_width; l++) {
+                    int off_i = i + (k - se_height / 2);
+                    int off_j = j + (l - se_width / 2);
+                    if ((off_i >= 0 && off_i < height) && (off_j >= 0 && off_j < width))
+                        if (data[off_i][off_j] == 1 && se[k][l] == 1)
+                            one_common = true;
+                }
+            }
+            if (one_common)
+                dilated_data[i][j] = 1;
+        }
+    }
+
+    data = dilated_data;
+}
+

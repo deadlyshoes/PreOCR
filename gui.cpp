@@ -17,7 +17,10 @@ MainWindow::MainWindow() {
     filters_menu = menuBar()->addMenu("&Filters");
     QAction *median_act = new QAction("&Median", this);
     connect(median_act, &QAction::triggered, this, [=]{apply_filter(Filters::MEDIAN);});
+    QAction *dilation_act = new QAction("&Dilation", this);
+    connect(dilation_act, &QAction::triggered, this, [=]{apply_filter(Filters::DILATION);});
     filters_menu->addAction(median_act);
+    filters_menu->addAction(dilation_act);
     filters_menu->setEnabled(false);
 
     label = new QLabel;
@@ -76,6 +79,11 @@ void MainWindow::apply_filter(Filters filter) {
         case MEDIAN:
             image->median(3);
             break;
+        case DILATION:
+            {
+                std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}; // 3x3 cross
+                image->dilation(default_se);
+            }
         default:
             break;
     }

@@ -21,5 +21,8 @@ public:
 
     // operations
     void median(const int &n);
+
     void erosion();
+    void dilation(std::vector<std::vector<int>> se);
+
 };
