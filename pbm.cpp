@@ -149,3 +149,37 @@ void PBM::median(const int &n) {
         }
     }
 }
+
+
+void PBM::erosion() {
+    std::cout << "fazendo a erosão" << std::endl;
+    std::vector<std::vector<int>>new_img(height, std::vector<int>(width, 0));
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (i == 0 || i == height - 1 || j == 0 || j == width - 1) { // ignorando as bordas
+                continue;
+            }else {
+                std::vector<int>mask(9); // máscara 
+                mask.push_back(data[i-1][j-1]);
+                mask.push_back(data[i-1][j+1]);
+                mask.push_back(data[i+1][j+1]);
+                mask.push_back(data[i+1][j-1]);
+
+                mask.push_back(data[i-1][j]);
+                mask.push_back(data[i][j-1]);
+                mask.push_back(data[i][j]);
+                mask.push_back(data[i][j+1]);
+                mask.push_back(data[i+1][j]);
+
+                std::vector<int>::iterator it = std::find(mask.begin(), mask.end(), 0);
+                
+                if (it != mask.end()) {
+                    new_img[i][j] = 0;
+                }else {
+                    new_img[i][j] = 1;
+                }
+            }
+        }
+    }
+    data = new_img;
+}

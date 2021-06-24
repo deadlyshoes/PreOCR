@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <math.h>
+#include <algorithm>
 
 class PBM {
 private:
@@ -20,4 +21,5 @@ public:
 
     // operations
     void median(const int &n);
+    void erosion();
 };
