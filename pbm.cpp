@@ -155,31 +155,26 @@ void PBM::median(const int &n) {
 void PBM::erosion() {
     std::cout << "fazendo a erosão" << std::endl;
     std::vector<std::vector<int>>new_img(height, std::vector<int>(width, 0));
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            if (i == 0 || i == height - 1 || j == 0 || j == width - 1) { // ignorando as bordas
-                continue;
-            }else {
-                std::vector<int>mask; // máscara
-                mask.push_back(data[i-1][j-1]);
-                mask.push_back(data[i-1][j+1]);
-                mask.push_back(data[i+1][j+1]);
-                mask.push_back(data[i+1][j-1]);
+    std::vector<std::vector<int>>se{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
 
-                mask.push_back(data[i-1][j]);
-                mask.push_back(data[i][j-1]);
-                mask.push_back(data[i][j]);
-                mask.push_back(data[i][j+1]);
-                mask.push_back(data[i+1][j]);
+    int se_height = se.size();
+    int se_width = se[0].size();
 
-                std::vector<int>::iterator it = std::find(mask.begin(), mask.end(), 0);
-                
-                if (it != mask.end()) {
-                    new_img[i][j] = 0;
-                }else {
-                    new_img[i][j] = 1;
+    for (int i = se_height; i < height - se_height; i++) {
+        for (int j = se_width; j < width - se_width; j++) {
+            bool all_common = true;
+            for (int k = 0; k < se_height; k++) {
+                for (int l = 0; l < se_width; l++) {
+                    int off_i = i + (k - se_height / 2);
+                    int off_j = j + (l - se_width / 2);
+                    if ((off_i >= 0 && off_i < height) && (off_j >= 0 && off_j < width))
+                        if (data[off_i][off_j] == 0 && se[k][l] == 1)
+                            all_common = false;
                 }
             }
+
+            if (all_common)
+                new_img[i][j] = 1;
         }
     }
     data = new_img;
