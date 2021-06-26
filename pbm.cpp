@@ -212,3 +212,12 @@ void PBM::dilation(std::vector<std::vector<int>> se) {
     data = dilated_data;
 }
 
+void PBM::opening(std::vector<std::vector<int>> se) {
+    erosion();
+    dilation(se);
+}
+
+void PBM::closing(std::vector<std::vector<int>> se) {
+    dilation(se);
+    erosion();
+}

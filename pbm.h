@@ -24,5 +24,6 @@ public:
 
     void erosion();
     void dilation(std::vector<std::vector<int>> se);
-
+    void opening(std::vector<std::vector<int>> se);
+    void closing(std::vector<std::vector<int>> se);
 };
