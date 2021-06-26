@@ -160,7 +160,7 @@ void PBM::erosion() {
             if (i == 0 || i == height - 1 || j == 0 || j == width - 1) { // ignorando as bordas
                 continue;
             }else {
-                std::vector<int>mask(9); // máscara 
+                std::vector<int>mask; // máscara
                 mask.push_back(data[i-1][j-1]);
                 mask.push_back(data[i-1][j+1]);
                 mask.push_back(data[i+1][j+1]);
