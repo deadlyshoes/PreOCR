@@ -30,7 +30,8 @@ private:
 
     enum Filters {
         MEDIAN,
-        DILATION
+        DILATION,
+        EROSION
     };
 
     void apply_filter(Filters filter);
