@@ -89,7 +89,10 @@ void MainWindow::apply_filter(Filters filter) {
             }
             break;
         case EROSION:
-            image->erosion();
+            {
+                std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}; // 3x3 cross
+                image->erosion(default_se);
+            }
             break;
         default:
             break;

@@ -152,10 +152,9 @@ void PBM::median(const int &n) {
 
 
 
-void PBM::erosion() {
+void PBM::erosion(std::vector<std::vector<int>> se) {
     std::cout << "fazendo a erosão" << std::endl;
     std::vector<std::vector<int>>new_img(height, std::vector<int>(width, 0));
-    std::vector<std::vector<int>>se{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
 
     int se_height = se.size();
     int se_width = se[0].size();
@@ -208,11 +207,11 @@ void PBM::dilation(std::vector<std::vector<int>> se) {
 }
 
 void PBM::opening(std::vector<std::vector<int>> se) {
-    erosion();
+    erosion(se);
     dilation(se);
 }
 
 void PBM::closing(std::vector<std::vector<int>> se) {
     dilation(se);
-    erosion();
+    erosion(se);
 }
