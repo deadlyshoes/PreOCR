@@ -89,6 +89,13 @@ PBM::PBM(const std::string& file) {
     input.close();
 }
 
+PBM::PBM(const PBM &other) {
+    height = other.height;
+    width = other.width;
+
+    data = other.data;
+}
+
 PBM::~PBM() {
 
 }

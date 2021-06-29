@@ -12,6 +12,7 @@ private:
 
 public:
     PBM(const std::string& file);
+    PBM(const PBM &other);
     ~PBM();
 
     int width, height;
