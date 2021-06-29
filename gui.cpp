@@ -20,10 +20,16 @@ MainWindow::MainWindow() {
     QAction *dilation_act = new QAction("&Dilation", this);
     connect(dilation_act, &QAction::triggered, this, [=]{apply_filter(Filters::DILATION);});
     QAction *erosion_act = new QAction("&Erosion", this);
-    connect(erosion_act, &QAction::triggered, this, [=]{apply_filter(Filters::EROSION);});
+    connect(erosion_act, &QAction::triggered, this, [=]{apply_filter(Filters::CLOSING);});
+    QAction *opening_act = new QAction("&Opening", this);
+    connect(opening_act, &QAction::triggered, this, [=]{apply_filter(Filters::OPENING);});
+    QAction *closing_act = new QAction("&Closing", this);
+    connect(closing_act, &QAction::triggered, this, [=]{apply_filter(Filters::CLOSING);});
     filters_menu->addAction(median_act);
     filters_menu->addAction(dilation_act);
     filters_menu->addAction(erosion_act);
+    filters_menu->addAction(opening_act);
+    filters_menu->addAction(closing_act);
     filters_menu->setEnabled(false);
 
     label = new QLabel;
@@ -92,6 +98,18 @@ void MainWindow::apply_filter(Filters filter) {
             {
                 std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}; // 3x3 cross
                 image->erosion(default_se);
+            }
+            break;
+        case OPENING:
+            {
+                std::vector<std::vector<int>> default_se{{0, 0, 1, 0, 0}, {0, 1, 1, 1, 0}, {1, 1, 1, 1, 1}, {0, 1, 1, 1, 0}, {0, 0, 1, 0, 0}}; // 3x3 cross
+                image->opening(default_se);
+            }
+            break;
+        case CLOSING:
+            {
+                std::vector<std::vector<int>> default_se{{0, 0, 1, 0, 0}, {0, 1, 1, 1, 0}, {1, 1, 1, 1, 1}, {0, 1, 1, 1, 0}, {0, 0, 1, 0, 0}}; // 3x3 cross
+                image->closing(default_se);
             }
             break;
         default:
