@@ -1,6 +1,6 @@
 #include <QMainWindow>
 
-#include "pbm.h"
+#include "preocr.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -17,10 +17,11 @@ public:
     ~MainWindow();
 
 private:
+    PreOCR *preocr;
     PBM *image;
     QImage *qimage;
     QLabel *label;
-    QMenu *filters_menu;
+    QMenu *filters_menu, *preocr_menu;
     QAction *save_as_act;
 
     void open_image();

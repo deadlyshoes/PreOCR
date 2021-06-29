@@ -32,6 +32,12 @@ MainWindow::MainWindow() {
     filters_menu->addAction(closing_act);
     filters_menu->setEnabled(false);
 
+    preocr_menu = menuBar()->addMenu("&PreOCR");
+    QAction *varredura_act = new QAction("&Varredura", this);
+    connect(varredura_act, &QAction::triggered, this, [=]{preocr->etapa2(); load_pixels();});
+    preocr_menu->addAction(varredura_act);
+    preocr_menu->setEnabled(false);
+
     label = new QLabel;
 
     QScrollArea *scroll_area = new QScrollArea;
@@ -50,8 +56,11 @@ void MainWindow::open_image() {
     QString image_path = QFileDialog::getOpenFileName(this, "Open");
     image = new PBM(image_path.toStdString());
     if (image) {
+        preocr = new PreOCR(image);
+
         MainWindow::load_image();
         filters_menu->setEnabled(true);
+        preocr_menu->setEnabled(true);
         save_as_act->setEnabled(true);
     }
 }
@@ -90,7 +99,7 @@ void MainWindow::apply_filter(Filters filter) {
             break;
         case DILATION:
             {
-                std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}; // 3x3 cross
+                std::vector<std::vector<int>> default_se{{1, 1, 1}}; // 3x3 cross
                 image->dilation(default_se);
             }
             break;
