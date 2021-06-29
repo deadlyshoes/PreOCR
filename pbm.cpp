@@ -166,8 +166,8 @@ void PBM::erosion(std::vector<std::vector<int>> se) {
     int se_height = se.size();
     int se_width = se[0].size();
 
-    for (int i = se_height; i < height - se_height; i++) {
-        for (int j = se_width; j < width - se_width; j++) {
+    for (int i = se_height / 2; i < (height - se_height / 2); i++) {
+        for (int j = se_width / 2; j < (width - se_width / 2); j++) {
             bool all_common = true;
             for (int k = 0; k < se_height; k++) {
                 for (int l = 0; l < se_width; l++) {
