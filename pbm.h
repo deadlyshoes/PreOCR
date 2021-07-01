@@ -27,4 +27,5 @@ public:
     void dilation(std::vector<std::vector<int>> se);
     void opening(std::vector<std::vector<int>> se);
     void closing(std::vector<std::vector<int>> se);
+    int count_lines();
 };

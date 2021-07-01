@@ -222,3 +222,33 @@ void PBM::closing(std::vector<std::vector<int>> se) {
     dilation(se);
     erosion(se);
 }
+
+int PBM::count_lines() {
+    int c_1 = 0;
+    int lines = 0;
+    for (int i = 0; i < height; ++i) {
+        int c_0 = 0;
+        bool word = false;
+        for (int j = 0; j < width; ++j) {
+            if (c_1 > 50) {
+                word = true;
+            }
+            if (data[i][j] == 1) {
+                c_1++;
+            }
+            else {
+                c_0++;
+            }
+
+            if (word && c_0 >= width-30) {
+                lines++;
+                c_1 = 0;
+                c_0 = 0;
+            }if (c_0 >= width-30) {
+                c_1 = 0;
+                c_0 = 0;
+            }
+        }
+    }
+    return lines;
+}
