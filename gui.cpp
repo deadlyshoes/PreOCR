@@ -20,7 +20,7 @@ MainWindow::MainWindow() {
     QAction *dilation_act = new QAction("&Dilation", this);
     connect(dilation_act, &QAction::triggered, this, [=]{apply_filter(Filters::DILATION);});
     QAction *erosion_act = new QAction("&Erosion", this);
-    connect(erosion_act, &QAction::triggered, this, [=]{apply_filter(Filters::CLOSING);});
+    connect(erosion_act, &QAction::triggered, this, [=]{apply_filter(Filters::EROSION);});
     QAction *opening_act = new QAction("&Opening", this);
     connect(opening_act, &QAction::triggered, this, [=]{apply_filter(Filters::OPENING);});
     QAction *closing_act = new QAction("&Closing", this);
