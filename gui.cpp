@@ -99,7 +99,7 @@ void MainWindow::apply_filter(Filters filter) {
             break;
         case DILATION:
             {
-                std::vector<std::vector<int>> default_se{{1, 1, 1}}; // 3x3 cross
+                std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}; // 3x3 cross
                 image->dilation(default_se);
             }
             break;

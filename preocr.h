@@ -18,7 +18,7 @@ public:
         int y1, y2;
     };
 
-    void dilatar_colunas();
+    void contar_linhas_colunas(int letter_height, int letter_width);
     std::vector<Rectangle> varredura();
 
     void etapa1();

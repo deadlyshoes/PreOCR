@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "pbm.h"
 
@@ -18,7 +19,6 @@ int main(int argc, char **argv) {
     }
 
     pbm->median(3);
-    pbm->erosion();
 
     pbm->write(argv[2]);
 

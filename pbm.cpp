@@ -157,32 +157,39 @@ void PBM::median(const int &n) {
     }
 }
 
-
-
 void PBM::erosion(std::vector<std::vector<int>> se) {
-    std::cout << "fazendo a erosão" << std::endl;
     std::vector<std::vector<int>>new_img(height, std::vector<int>(width, 0));
 
     int se_height = se.size();
     int se_width = se[0].size();
 
-    for (int i = se_height / 2; i < (height - se_height / 2); i++) {
-        for (int j = se_width / 2; j < (width - se_width / 2); j++) {
+    for (int i = se_height / 2; i < height - se_height / 2; i++) {
+        for (int j = se_width / 2; j < width - se_width / 2; j++) {
             bool all_common = true;
             for (int k = 0; k < se_height; k++) {
                 for (int l = 0; l < se_width; l++) {
                     int off_i = i + (k - se_height / 2);
                     int off_j = j + (l - se_width / 2);
-                    if ((off_i >= 0 && off_i < height) && (off_j >= 0 && off_j < width))
-                        if (data[off_i][off_j] == 0 && se[k][l] == 1)
-                            all_common = false;
+                    if (data[off_i][off_j] == 0 && se[k][l] == 1) {
+                        all_common = false;
+                        goto done;
+                    }
                 }
             }
 
-            if (all_common)
-                new_img[i][j] = 1;
+            done:
+                if (all_common)
+                    new_img[i][j] = 1;
         }
     }
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (new_img[i][j] == 1 && data[i][j] != 1)
+                std::cout << "erosão incorreta" << std::endl;
+        }
+    }
+
     data = new_img;
 }
 
@@ -194,19 +201,32 @@ void PBM::dilation(std::vector<std::vector<int>> se) {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
+            if (dilated_data[i][j] == 1)
+                continue;
+
             // check intersection with SE
             bool one_common = false;
+            int last_k, last_l;
             for (int k = 0; k < se_height; k++) {
                 for (int l = 0; l < se_width; l++) {
                     int off_i = i + (k - se_height / 2);
                     int off_j = j + (l - se_width / 2);
                     if ((off_i >= 0 && off_i < height) && (off_j >= 0 && off_j < width))
-                        if (data[off_i][off_j] == 1 && se[k][l] == 1)
+                        if (data[off_i][off_j] == 1 && se[k][l] == 1) {
                             one_common = true;
+                            last_k = k;
+                            last_l = l;
+                            goto done;
+                        }
                 }
             }
-            if (one_common)
-                dilated_data[i][j] = 1;
+            done:
+                if (one_common) {
+                    for (int k = last_k, v = i; k >= 0 && se[k][last_l] == 1 && v < height; k--, v++)
+                        dilated_data[v][j] = 1;
+                    for (int l = last_l, w = j; l >= 0 && se[last_k][l] == 1 && w < width; l--, w++)
+                        dilated_data[i][w] = 1;
+                }
         }
     }
 
