@@ -22,10 +22,8 @@ public:
 
     // operations
     void median(const int &n);
-
     void erosion(std::vector<std::vector<int>> se);
     void dilation(std::vector<std::vector<int>> se);
     void opening(std::vector<std::vector<int>> se);
     void closing(std::vector<std::vector<int>> se);
-    int count_lines();
 };

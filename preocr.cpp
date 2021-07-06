@@ -5,6 +5,9 @@ PreOCR::PreOCR(PBM *out_pbm) {
     pbm = out_pbm;
 }
 
+/* busca por toda a imagem
+ * expande por pixels acesos
+ * devolve retângulos que circunscrevem as regiões de pixels acesos */
 std::vector<PreOCR::Rectangle> PreOCR::varredura() {
     std::vector<Rectangle> rectangles;
 
@@ -13,6 +16,7 @@ std::vector<PreOCR::Rectangle> PreOCR::varredura() {
     for (int i = 0; i < pbm->height; i++) {
         for (int j = 0; j < pbm->width; j++) {
             // word?
+            // região de pixels acesos
             if (pbm->data[i][j] == 1 && !vis[i][j]) {
                 Rectangle rect = {INT_MAX, INT_MIN, INT_MAX, INT_MIN};
 
@@ -24,6 +28,7 @@ std::vector<PreOCR::Rectangle> PreOCR::varredura() {
                     int y = q.front().second;
                     q.pop();
 
+                    // cálculo do retângulo
                     rect.x1 = std::min(rect.x1, x);
                     rect.x2 = std::max(rect.x2, x);
                     rect.y1 = std::min(rect.y1, y);
@@ -53,12 +58,15 @@ std::vector<PreOCR::Rectangle> PreOCR::varredura() {
 void PreOCR::contar_linhas_colunas(int letter_height, int letter_width) {
     PBM *tmp = new PBM(*pbm);
 
+    /* tentar grudar as letras e palavras de uma linha */
     std::vector<std::vector<int>> se_line(1, std::vector<int>(letter_width, 1));
     pbm->dilation(se_line);
 
+    /* capturar acentuação e ponto do i */
     const std::vector<std::vector<int>> default_se(std::max(1, letter_height / 5), std::vector<int>(1, 1));
     pbm->closing(default_se);
 
+    /* contar linhas */
     std::vector<Rectangle> lines_rects = varredura();
     int n_lines = lines_rects.size();
 
@@ -73,7 +81,8 @@ void PreOCR::contar_linhas_colunas(int letter_height, int letter_width) {
         }
     }
 
-    const std::vector<std::vector<int>> se_column(pbm->height, std::vector<int>(1, 1));
+    /* contar colunas */
+    const std::vector<std::vector<int>> se_column(letter_height * 10, std::vector<int>(1, 1));
     pbm->dilation(se_column);
 
     std::vector<Rectangle> columns_rects = varredura();
@@ -86,6 +95,9 @@ void PreOCR::contar_linhas_colunas(int letter_height, int letter_width) {
     delete tmp;
 }
 
+/* remoção de ruído
+ * como o nosso filtro da mediana ignora as bordas,
+ * elas foram removidas em seguida */
 void PreOCR::etapa1() {
     pbm->median(3);
 
@@ -100,6 +112,9 @@ void PreOCR::etapa1() {
         pbm->data[pbm->height - 1][j] = 0;
 }
 
+/* contagem de letras
+ * contagem de linhas e colunas
+ * circunscrição de palavras */
 void PreOCR::etapa2() {
     etapa1();
 

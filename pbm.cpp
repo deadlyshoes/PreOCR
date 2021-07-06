@@ -126,6 +126,7 @@ void PBM::median(const int &n) {
         return;
     }
 
+    /* pré-processamento */
     std::vector<std::vector<int>> median_dp(height, std::vector<int>(width, 0));
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -139,6 +140,7 @@ void PBM::median(const int &n) {
         }
     }
 
+    /* aplicação do filtro */
     for (int i = n / 2; i < height - n / 2; i++) {
         for (int j = n / 2; j < width - n / 2; j++) {
             int count_1 = median_dp[i + n / 2][j + n / 2];
@@ -183,13 +185,6 @@ void PBM::erosion(std::vector<std::vector<int>> se) {
         }
     }
 
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            if (new_img[i][j] == 1 && data[i][j] != 1)
-                std::cout << "erosão incorreta" << std::endl;
-        }
-    }
-
     data = new_img;
 }
 
@@ -201,6 +196,7 @@ void PBM::dilation(std::vector<std::vector<int>> se) {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
+            /* pular os já calculados */
             if (dilated_data[i][j] == 1)
                 continue;
 
@@ -222,6 +218,7 @@ void PBM::dilation(std::vector<std::vector<int>> se) {
             }
             done:
                 if (one_common) {
+                    /* otimização descrita no relatório */
                     for (int k = last_k, v = i; k >= 0 && se[k][last_l] == 1 && v < height; k--, v++)
                         dilated_data[v][j] = 1;
                     for (int l = last_l, w = j; l >= 0 && se[last_k][l] == 1 && w < width; l--, w++)
@@ -241,34 +238,4 @@ void PBM::opening(std::vector<std::vector<int>> se) {
 void PBM::closing(std::vector<std::vector<int>> se) {
     dilation(se);
     erosion(se);
-}
-
-int PBM::count_lines() {
-    int c_1 = 0;
-    int lines = 0;
-    for (int i = 0; i < height; ++i) {
-        int c_0 = 0;
-        bool word = false;
-        for (int j = 0; j < width; ++j) {
-            if (c_1 > 50) {
-                word = true;
-            }
-            if (data[i][j] == 1) {
-                c_1++;
-            }
-            else {
-                c_0++;
-            }
-
-            if (word && c_0 >= width-30) {
-                lines++;
-                c_1 = 0;
-                c_0 = 0;
-            }if (c_0 >= width-30) {
-                c_1 = 0;
-                c_0 = 0;
-            }
-        }
-    }
-    return lines;
 }
