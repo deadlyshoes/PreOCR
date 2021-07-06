@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "pbm.h"
+#include "preocr.h"
 
 int main(int argc, char **argv) {
     if (argc < 3) {
@@ -18,15 +19,9 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    pbm->median(3);
+    PreOCR preocr = PreOCR(pbm);
+    preocr.etapa2();
 
-    std::vector<std::vector<int>> default_se{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}};
-    for (int i = 0; i < 4; ++i)
-    {
-        pbm->dilation(default_se);
-    }
-    int l = pbm->count_lines();
-    std::cout << l;
     pbm->write(argv[2]);
 
     return 0;
