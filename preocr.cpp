@@ -5,6 +5,10 @@ PreOCR::PreOCR(PBM *out_pbm) {
     pbm = out_pbm;
 }
 
+PreOCR::~PreOCR() {
+
+}
+
 /* busca por toda a imagem
  * expande por pixels acesos
  * devolve retângulos que circunscrevem as regiões de pixels acesos */
@@ -87,6 +91,17 @@ void PreOCR::contar_linhas_colunas(int letter_height, int letter_width) {
 
     std::vector<Rectangle> columns_rects = varredura();
     int n_columns = columns_rects.size();
+
+    for (const Rectangle &rect : columns_rects) {
+        for (int i = rect.x1; i <= rect.x2; i++) {
+            pbm->data[i][rect.y1] = 1;
+            pbm->data[i][rect.y2] = 1;
+        }
+        for (int i = rect.y1; i <= rect.y2; i++) {
+            pbm->data[rect.x1][i] = 1;
+            pbm->data[rect.x2][i] = 1;
+        }
+    }
 
     std::cout << n_lines << " linha(s)" << std::endl;
     std::cout << n_columns << " coluna(s)" << std::endl;

@@ -14,4 +14,4 @@ if (Qt5_FOUND)
     target_link_libraries(PreOCR_gui Qt5::Widgets)
 endif()
 
-add_executable(PreOCR main.cpp preocr.h preocr.cpp pbm.h pbm.cpp)
+add_executable(PreOCR main.cpp pbm.h pbm.cpp preocr.h preocr.cpp)

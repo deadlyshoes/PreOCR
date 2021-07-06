@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 
-#include "pbm.h"
 #include "preocr.h"
 
 int main(int argc, char **argv) {
